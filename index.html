@@ -1,1 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LingU – Linguística e Ensino de Letras</title>
+<style>
+:root{
+  --bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;
+  --primary:#5b5bd6;--primary2:#ececff;--good:#087f5b;--goodbg:#e8f8f2;
+  --bad:#b42318;--badbg:#fff0ee;--border:#e4e7ec;--shadow:0 8px 30px rgba(16,24,40,.08);
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button{font:inherit;cursor:pointer}.app{max-width:1100px;margin:auto;padding-bottom:80px}
+header{padding:24px 18px 10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:800;font-size:23px}.brand span{color:var(--primary)}
+.header-sub{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:8px;padding:8px 18px 16px;overflow:auto;position:sticky;top:0;background:rgba(245,247,251,.94);backdrop-filter:blur(10px);z-index:5}
+.tab{border:1px solid var(--border);background:#fff;border-radius:12px;padding:10px 13px;color:#475467;white-space:nowrap}
+.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+main{padding:0 18px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.hero{background:linear-gradient(135deg,#5b5bd6,#7777ee);color:#fff;border:0}
+.hero h1{font-size:28px;margin:0 0 8px}.hero p{margin:0;opacity:.9;line-height:1.55}
+.kicker{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--primary)}
+.hero .kicker{color:#dfe0ff}.big{font-size:34px;font-weight:800;margin:8px 0}.muted{color:var(--muted);line-height:1.55}
+.progress{height:9px;background:#eceef3;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:var(--primary);border-radius:20px}
+.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700;background:var(--primary);color:#fff}.btn.secondary{background:#fff;color:var(--primary);border:1px solid #cfd0f8}.btn.ghost{background:#f2f4f7;color:#344054}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+h2{margin:6px 0 14px;font-size:21px} h3{margin:0 0 9px;font-size:17px}
+.pills{display:flex;flex-wrap:wrap;gap:7px}.pill{background:#f2f4f7;border-radius:999px;padding:6px 9px;font-size:12px}
+.priority{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.priority .card{box-shadow:none}
+.num{width:28px;height:28px;border-radius:9px;background:var(--primary2);color:var(--primary);display:grid;place-items:center;font-weight:800}
+.topic{display:flex;gap:10px;align-items:flex-start}
+.topic p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.5}
+.alert{border-left:4px solid var(--primary);padding:12px 14px;background:#f7f7ff;border-radius:10px;line-height:1.55}
+.summary-section{margin-bottom:14px}.summary-section .card{box-shadow:none}
+.mind{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mind div{padding:12px;background:#f8f9fc;border:1px solid var(--border);border-radius:12px}
+.mind b{display:block;margin-bottom:4px}.mind span{font-size:13px;color:var(--muted)}
+.question-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.source{font-size:11px;color:var(--muted);background:#f2f4f7;padding:5px 8px;border-radius:999px}
+.question{font-size:18px;font-weight:750;line-height:1.45;margin:18px 0}
+.options{display:grid;gap:9px}.option{width:100%;text-align:left;border:1px solid var(--border);background:#fff;border-radius:13px;padding:13px;line-height:1.4;color:var(--text)}
+.option:hover{border-color:#aaaaf0;background:#fafaff}.option.correct{border-color:#53b79b;background:var(--goodbg)}.option.wrong{border-color:#ef8d83;background:var(--badbg)}
+.option .letter{font-weight:800;display:inline-block;width:25px}
+.feedback{margin-top:14px;border-radius:14px;padding:14px;line-height:1.55}.feedback.good{background:var(--goodbg);color:#075c45}.feedback.bad{background:var(--badbg);color:#8a1c14}
+.feedback b{display:block;margin-bottom:4px}.explain{margin-top:5px}
+.controls{display:flex;justify-content:space-between;gap:10px;margin-top:16px}.controls .right{display:flex;gap:8px}
+.score{font-size:38px;font-weight:850}.center{text-align:center}.hide{display:none!important}
 
+.study-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.study-q{font-size:17px;font-weight:750;line-height:1.5;margin:8px 0 13px}
+.study-answer{margin-top:12px;padding:14px;border-radius:13px;background:var(--goodbg);border-left:4px solid #53b79b;line-height:1.55}
+.study-answer .answer-title{font-weight:800;color:#075c45}
+.study-option{padding:8px 10px;margin:5px 0;background:#f8f9fc;border-radius:9px;font-size:14px}
+.study-correct{background:#e8f8f2;border:1px solid #9bd7c4;font-weight:700}
+
+.review-item{border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:9px;background:#fff}
+.review-item b{display:block;margin-bottom:5px}.review-item small{color:var(--muted)}
+select{padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff}
+
+.mobile-nav{display:none}
+
+@media(max-width:760px){
+  html{scroll-behavior:smooth}
+  body{font-size:15px}
+  .app{width:100%;max-width:none;padding-bottom:88px}
+  header{
+    padding:14px 14px 8px;
+    min-height:58px;
+    align-items:center;
+  }
+  .brand{font-size:19px}
+  .header-sub{font-size:10px;margin-top:2px}
+  header .btn{padding:8px 10px;font-size:12px}
+
+  .desktop-tabs{display:none}
+  .mobile-nav{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:50;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid var(--border);
+    box-shadow:0 -5px 20px rgba(16,24,40,.10);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    backdrop-filter:blur(12px);
+  }
+  .mobile-tab{
+    border:0;background:transparent;color:#667085;
+    min-height:55px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;border-radius:12px;
+    padding:4px 2px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mobile-tab span{font-size:20px;line-height:1}
+  .mobile-tab small{font-size:10px;font-weight:700}
+  .mobile-tab.active{color:var(--primary);background:#f1f1ff}
+
+  main{padding:0 10px}
+  .hero{border-radius:16px;padding:16px}
+  .hero h1{font-size:22px;line-height:1.2;margin-bottom:8px}
+  .hero p{font-size:14px;line-height:1.5}
+  h2{font-size:19px;margin:4px 0 12px}
+  h3{font-size:16px}
+  .card{border-radius:15px;padding:14px;box-shadow:0 3px 14px rgba(16,24,40,.06)}
+
+  .grid,.priority,.mind{grid-template-columns:1fr}
+  .priority{gap:9px}
+  .priority .card{padding:13px}
+  .priority .muted{margin-bottom:0}
+
+  .kicker{font-size:10px}
+  .big{font-size:29px}
+  .muted{font-size:13px;line-height:1.55}
+  .pills{gap:5px}
+  .pill{font-size:11px;padding:5px 8px}
+
+  /* Summary: readable chunks instead of dense blocks */
+  .summary-section{margin-bottom:10px}
+  .summary-section .card{padding:15px}
+  .summary-section p{font-size:14px;line-height:1.62}
+  .mind{gap:7px}
+  .mind div{padding:10px}
+  .mind span{font-size:12px;line-height:1.45;display:block}
+  .alert{font-size:13px;line-height:1.55;padding:11px 12px}
+
+  /* Question screens */
+  .question-head{align-items:center}
+  .source{font-size:9px;padding:4px 7px}
+  .question{font-size:17px;line-height:1.48;margin:14px 0}
+  .options{gap:8px}
+  .option{
+    min-height:52px;
+    padding:13px 11px;
+    font-size:14px;
+    border-radius:12px;
+    touch-action:manipulation;
+  }
+  .option .letter{width:27px}
+  .feedback{font-size:13px;line-height:1.55;padding:12px}
+  .controls{
+    position:sticky;
+    bottom:76px;
+    z-index:4;
+    margin:14px -2px -2px;
+    padding:8px 2px 3px;
+    background:linear-gradient(transparent,rgba(255,255,255,.98) 25%);
+  }
+  .controls .btn,.controls button{min-height:46px}
+  .btn{min-height:44px;padding:10px 13px;font-size:13px}
+
+  /* Study + answer mode */
+  .study-card{padding:14px;border-radius:15px;margin-bottom:10px}
+  .study-q{font-size:16px;line-height:1.5}
+  .study-option{font-size:13px;line-height:1.45;padding:9px}
+  .study-answer{font-size:13px;line-height:1.55;padding:12px}
+  .study-card>.btn{width:100%;margin-top:8px}
+
+  select{
+    width:100%;
+    min-height:44px;
+    font-size:14px;
+    background:#fff;
+  }
+
+  /* Simulado start/result */
+  .center .score{font-size:34px}
+
+  /* Error review */
+  .review-item{padding:12px;border-radius:13px}
+  .review-item b{font-size:14px;line-height:1.45}
+
+  /* Avoid sticky nav covering content */
+  .page{scroll-margin-top:8px}
+}
+
+@media(max-width:760px){.grid,.priority,.mind{grid-template-columns:1fr}.hero h1{font-size:24px}main{padding:0 12px}.tabs{padding-left:12px;padding-right:12px}header{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div><div class="brand">Ling<span>U</span> 🧠</div><div class="header-sub">Linguística e Ensino de Letras • revisão de emergência</div></div>
+  <button class="btn ghost" onclick="resetProgress()">Resetar</button>
+</header>
+<nav class="tabs desktop-tabs">
+  <button class="tab active" data-tab="home">🏠 Início</button>
+  <button class="tab" data-tab="summary">📚 Resumo</button>
+  <button class="tab" data-tab="study">⚡ Estudo</button>
+  <button class="tab" data-tab="train">🎯 Treino</button>
+  <button class="tab" data-tab="exam">📝 Simulado</button>
+  <button class="tab" data-tab="errors">🔁 Erros</button>
+</nav>
+
+<nav class="mobile-nav" aria-label="Navegação principal">
+  <button class="mobile-tab active" data-tab="home"><span>⌂</span><small>Início</small></button>
+  <button class="mobile-tab" data-tab="summary"><span>📚</span><small>Resumo</small></button>
+  <button class="mobile-tab" data-tab="study"><span>⚡</span><small>Estudar</small></button>
+  <button class="mobile-tab" data-tab="train"><span>🎯</span><small>Treino</small></button>
+  <button class="mobile-tab" data-tab="exam"><span>📝</span><small>Prova</small></button>
+</nav>
+<main>
+
+<section id="home" class="page">
+  <div class="card hero">
+    <div class="kicker">Plano para hoje</div>
+    <h1>Você não precisa saber tudo. Precisa reconhecer as ideias que mais se repetem.</h1>
+    <p>Comece pelo “O que decorar primeiro”, depois faça questões. Quando errar, leia a explicação antes de avançar.</p>
+    <div style="margin-top:16px"><button class="btn secondary" onclick="showTab('summary')">Começar pelo resumo →</button></div>
+  </div>
+  <div style="height:14px"></div>
+  <div class="grid">
+    <div class="card"><div class="kicker">Seu progresso</div><div class="big" id="homeScore">0%</div><div class="progress"><i id="homeBar" style="width:0%"></i></div><p class="muted" id="homeDetail">Nenhuma questão respondida ainda.</p></div>
+    <div class="card"><div class="kicker">Prioridade</div><h3>6 blocos para dominar</h3><div class="pills"><span class="pill">Linguística Aplicada</span><span class="pill">Diversidade</span><span class="pill">Leitura</span><span class="pill">Níveis</span><span class="pill">Bilinguismo</span><span class="pill">Materiais</span></div></div>
+  </div>
+  <div style="height:14px"></div>
+  <h2>O que decorar primeiro</h2>
+  <div class="priority">
+    <div class="card"><div class="num">1</div><h3>LA = linguagem em uso</h3><p class="muted">Estuda problemas reais de linguagem e aproxima teoria da prática.</p></div>
+    <div class="card"><div class="num">2</div><h3>Língua ≠ homogênea</h3><p class="muted">Ela é heterogênea, dinâmica e varia por região, grupo, tempo e situação.</p></div>
+    <div class="card"><div class="num">3</div><h3>Norma ≠ única língua</h3><p class="muted">A norma culta é uma variedade de prestígio; o ensino deve trabalhar adequação ao contexto.</p></div>
+    <div class="card"><div class="num">4</div><h3>Leitura é mais que decodificar</h3><p class="muted">Pense em decodificação + conhecimento prévio + prática social/interação.</p></div>
+    <div class="card"><div class="num">5</div><h3>Bilíngue é multidimensional</h3><p class="muted">A educação bilíngue envolve diferentes conceitos, modelos e dimensões.</p></div>
+    <div class="card"><div class="num">6</div><h3>Multimodalidade</h3><p class="muted">Materiais podem integrar texto, imagem, som e outras linguagens; isso se relaciona aos multiletramentos.</p></div>
+  </div>
+</section>
+
+<section id="summary" class="page hide">
+  <h2>📚 Resumo para quem não estudou nada</h2>
+  <div class="alert"><b>Regra mental:</b> se uma alternativa trata a língua como totalmente fixa, homogênea, isolada do contexto ou reduzida à norma-padrão, desconfie. O material enfatiza uso, contexto, diversidade, interação e integração entre teoria e prática.</div>
+  <div style="height:12px"></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">1 • Linguística Aplicada</div><h3>O que é?</h3>
+  <p class="muted">É uma área que investiga a linguagem em situações reais e busca contribuições para problemas concretos. No material, aparece ligada a identidade, valores, crenças, ensino de língua e necessidades sociais. Ela não deve ser entendida como simples aplicação mecânica de uma teoria pronta.</p>
+  <div class="mind"><div><b>Teoria ↔ prática</b><span>Os estudos linguísticos partem da prática e voltam para a prática.</span></div><div><b>Transdisciplinar / indisciplinar</b><span>Dialoga com diferentes áreas para compreender problemas de linguagem.</span></div><div><b>LA crítica</b><span>Nos exercícios, aparece ligada à leitura crítica da realidade e à consciência do domínio que a língua pode exercer.</span></div><div><b>Ensino</b><span>Busca metodologias próximas da realidade e das necessidades dos alunos.</span></div></div>
+  </div></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">2 • Descrição e diversidade</div><h3>Língua é heterogênea e dinâmica</h3>
+  <p class="muted">A Linguística Aplicada e a Sociolinguística ajudam a superar a ideia de que existe apenas uma forma legítima de falar. A escola deve ensinar a variedade de prestígio sem transformar as demais em “língua errada”. O foco é adequação ao contexto.</p>
+  <div class="mind"><div><b>Diatópica</b><span>região/geografia.</span></div><div><b>Diastrática</b><span>grupos e classes sociais.</span></div><div><b>Diacrônica</b><span>épocas / passagem do tempo.</span></div><div><b>Diafásica</b><span>situação e grau de formalidade.</span></div></div>
+  <p class="muted"><b>Saussure:</b> a linguagem possui dimensão individual e social e envolve sistema estabelecido e evolução. <b>Labov:</b> a variação pode ser relacionada a fatores sociais. <b>Pragmática:</b> considera contexto, intenção, implícitos e atos de fala.</p>
+  </div></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">3 • Ensino de língua</div><h3>O professor não é apenas “juiz do certo e errado”</h3>
+  <p class="muted">O professor atua como mediador. Deve ampliar o repertório do aluno, respeitar sua identidade linguística e ensinar a usar diferentes variedades conforme a situação. Isso não significa abandonar a gramática normativa: significa não reduzir o ensino a ela.</p>
+  <div class="alert"><b>Exemplo que cai:</b> “Vem pra Caixa você também” é coloquial e mistura formas de tratamento. No contexto publicitário, a escolha pode ser adequada ao objetivo de alcançar o público. Em escrita formal, a norma pode exigir outra construção. <b>A chave é contexto comunicativo.</b></div>
+  </div></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">4 • Leitura e escrita</div><h3>Três formas de entender a leitura</h3>
+  <div class="mind"><div><b>Decodificação</b><span>texto como código; extrair informações explícitas; processo mais linear.</span></div><div><b>Cognitiva</b><span>leitor usa conhecimentos prévios, repertório e constrói hipóteses.</span></div><div><b>Prática social</b><span>interação entre leitor, texto e autor; leitura ocorre em condições sociais.</span></div><div><b>Ensino</b><span>não separar rigidamente leitura, escrita, gramática e literatura; articular fala e escrita.</span></div></div>
+  <p class="muted"><b>Oralidade x escrita:</b> são relacionadas, mas não idênticas. A escrita pode ser planejada, revista e reelaborada; a fala acontece em tempo real. A escola deve trabalhar ambas.</p>
+  </div></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">5 • Níveis de análise</div><h3>Como identificar rapidamente</h3>
+  <div class="mind"><div><b>Fonologia</b><span>sons/fonemas e contrastes. “asa” × “assa” exemplifica diferença sonora.</span></div><div><b>Morfologia</b><span>estrutura e formação das palavras.</span></div><div><b>Sintaxe</b><span>função e organização das palavras na oração; ex.: sujeito.</span></div><div><b>Pragmática</b><span>sentido dependente do contexto, intenção e implicaturas.</span></div></div>
+  <p class="muted"><b>Gerativismo:</b> o exercício associa a crítica ao behaviorismo ao argumento da criatividade da linguagem. <b>ADC:</b> nos exercícios, aparece ligada à relação entre linguagem e sociedade, poder e ideologia.</p>
+  </div></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">6 • Educação bilíngue</div><h3>O que a prova tende a cobrar</h3>
+  <p class="muted">Nancy Hornberger é associada, nos exercícios, a três modelos: <b>transição, manutenção e enriquecimento</b>. A própria existência desses modelos mostra a <b>complexidade e diversidade</b> dos conceitos de educação bilíngue.</p>
+  <div class="alert"><b>Modelo de transição:</b> nos exercícios, “transição” é a passagem do uso da língua do estudante para chegar à língua dominante.</div>
+  <p class="muted"><b>Bilinguismo:</b> é tratado como multidimensional; a Linguística não é a única área relevante para estudá-lo.</p>
+  </div></div>
+
+  <div class="summary-section"><div class="card"><div class="kicker">7 • Materiais didáticos e multiletramentos</div><h3>Material bom = objetivo + conteúdo + metodologia + público</h3>
+  <p class="muted">A linguagem do material deve ser adequada ao público e às atividades. Uma linguagem dialógica pode usar primeira pessoa do plural ou “você”. A multimodalidade integra diferentes modos de linguagem, como texto, imagem e som. O uso de novas mídias reforça a ideia de <b>multiletramentos</b>.</p>
+  <div class="alert"><b>Gramática reflexiva:</b> a atividade não deve apenas mandar decorar listas ou definições; ela deve levar o aluno a observar, comparar e refletir sobre o funcionamento da língua em textos.</div>
+  </div></div>
+</section>
+
+<section id="study" class="page hide">
+  <div class="card hero">
+    <div class="kicker">Modo mais simples</div>
+    <h1>⚡ Estudo + Gabarito</h1>
+    <p>Leia a pergunta, tente responder mentalmente e abra a resposta. Aqui você não precisa fazer prova: é para memorizar rapidamente.</p>
+  </div>
+  <div style="height:12px"></div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+      <div>
+        <h2>Como estudar</h2>
+        <p class="muted">1. Leia a questão → 2. pense na resposta → 3. clique em “Ver gabarito” → 4. leia a explicação.</p>
+      </div>
+      <select id="studySelect">
+        <option value="all">Todos os temas</option>
+        <option value="LA">Linguística Aplicada</option>
+        <option value="DIV">Diversidade / ensino</option>
+        <option value="READ">Leitura e escrita</option>
+        <option value="NIV">Níveis de análise</option>
+        <option value="BIL">Educação bilíngue</option>
+        <option value="MAT">Materiais didáticos</option>
+      </select>
+    </div>
+  </div>
+  <div style="height:12px"></div>
+  <div id="studyBox"></div>
+</section>
+
+<section id="train" class="page hide">
+  <div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><div><h2>🎯 Treino</h2><p class="muted">Questões curtas. Responda, leia o feedback e só então avance.</p></div><select id="moduleSelect"><option value="all">Todos os temas</option><option value="LA">Linguística Aplicada</option><option value="DIV">Diversidade / ensino</option><option value="READ">Leitura e escrita</option><option value="NIV">Níveis de análise</option><option value="BIL">Educação bilíngue</option><option value="MAT">Materiais didáticos</option></select></div></div>
+  <div style="height:12px"></div><div id="trainBox"></div>
+</section>
+
+<section id="exam" class="page hide">
+  <div id="examStart" class="card center"><h2>📝 Simulado de 10 questões</h2><p class="muted">Formato parecido com a prova: 10 perguntas, alternativas A–E. Sem feedback até você responder cada questão; ao final, veja seu desempenho e os pontos para revisar.</p><button class="btn" onclick="startExam()">Começar simulado</button></div>
+  <div id="examBox" class="hide"></div>
+</section>
+
+<section id="errors" class="page hide">
+  <h2>🔁 Revisão dos seus erros</h2>
+  <p class="muted">As questões que você errou ficam aqui para uma segunda tentativa.</p>
+  <div id="errorsBox"></div>
+</section>
+</main>
+</div>
+
+<script>
+const Q=[
+{m:"LA",s:"Simulado I",q:"Analise as afirmativas: I. O ensino de língua materna deve ser contextualizado e levar em conta a realidade do aluno. II. Deve integrar escrita, leitura, fala, texto e categorias gramaticais. III. Deve aproximar o aprendizado do mundo real e das necessidades de comunicação. Está correto o que se afirma em:",o:["I","I, II","I, III","II, III","I, II e III"],a:4,e:"As três afirmações coincidem com a proposta de contextualização, integração das modalidades e aproximação entre língua e vida social."},
+{m:"LA",s:"Simulado I",q:"Uma das áreas mais promissoras da Linguística Aplicada é a Linguística Aplicada Crítica. Sobre ela, é correto dizer que:",o:["Ignora temáticas controversas da vida social.","É restrita ao saber linguístico e sem diálogo com outras áreas.","Defende caráter unidisciplinar e atemporal.","Busca uma leitura crítica da realidade sem qualquer relação com questões sociais.","Promove consciência sobre o domínio que a língua exerce sobre as pessoas, considerando o contexto geopolítico e sócio-histórico."],a:4,e:"No conjunto de exercícios, a LA crítica aparece relacionada à consciência crítica, ao poder da linguagem e ao contexto social e histórico."},
+{m:"LA",s:"Simulado I",q:"A Linguística não é uma disciplina homogênea. Sobre a Linguística Aplicada, é correto afirmar que:",o:["Visa somente problemas teóricos de escrita.","É fruto apenas do desenvolvimento da Linguística para aperfeiçoar a língua materna.","Procura apenas metodologias alternativas para o ensino da fala.","É um campo transdisciplinar, indisciplinar e intercultural que busca solucionar problemas ligados à linguagem.","Surgiu antes da Segunda Guerra Mundial para soluções diplomáticas."],a:3,e:"A formulação destacada nos exercícios define a LA como campo transdisciplinar, indisciplinar e intercultural voltado a problemas de linguagem."},
+{m:"LA",s:"Simulado I",q:"Uma das maiores contribuições da Linguística Aplicada ao ensino de língua inglesa tem sido:",o:["Testar apenas métodos de gramática.","Desenvolver metodologias mais próximas da realidade dos alunos.","Formar professores para aplicar metodologias pouco variáveis.","Criar métodos exclusivamente para inglês, sem contexto.","Aperfeiçoar somente fonética e fonologia para a escrita."],a:1,e:"A ênfase dos exercícios está em metodologias próximas da realidade dos alunos e das necessidades do processo de ensino-aprendizagem."},
+{m:"READ",s:"Simulado I",q:"A leitura é um processo bastante complexo. Qual abordagem aparece como a mais abrangente no material?",o:["Leitura como mera decodificação.","Leitura apenas como atividade cognitiva.","Leitura também como prática social, com interação entre texto e leitor.","Leitura como busca de elementos gramaticais.","Leitura apenas pelo sentido isolado das palavras."],a:2,e:"O material apresenta decodificação e atividade cognitiva como abordagens importantes, mas acrescenta a leitura como prática social, considerando a interação entre leitor, texto e autor."},
+{m:"DIV",s:"Simulado I",q:"As línguas não são imutáveis. Essas mudanças ocorrem em função:",o:["Somente da diversidade cultural do território.","Do contato com outras línguas e de fatores como faixa etária, classe social e profissão.","Da baixa qualidade da formação docente.","Somente do contato com outras línguas e dos meios de comunicação.","Da pouca leitura da população."],a:1,e:"O material relaciona a mudança linguística ao contato com outras línguas e a fatores sociais, como idade, classe e profissão."},
+{m:"DIV",s:"Simulado I",q:"A língua padrão, embora seja uma variante entre muitas, costuma ter maior prestígio. Esse prestígio advém:",o:["Da superioridade gramatical intrínseca.","De sua pureza e imutabilidade.","Da aceitação espontânea das classes populares.","De raízes históricas ligadas a todos os grupos sociais igualmente.","Do uso por camadas mais instruídas e do poder/prestígio social de determinados grupos."],a:4,e:"O material explica que o prestígio da norma culta está relacionado a fatores sociais, políticos, econômicos e ao poder de grupos que a legitimaram."},
+{m:"DIV",s:"Simulado I",q:"Diante das variações linguísticas, o papel do professor é:",o:["Abandonar a norma culta.","Orientar todos a falar exatamente da mesma forma.","Reconhecer e valorizar o aprendizado linguístico da família e do grupo social do aluno, respeitando sua identidade.","Reprimir as variedades não padrão.","Tornar uma única linguagem permitida na escola."],a:2,e:"A proposta é respeitar a identidade linguística e ampliar o repertório, ensinando adequação aos diferentes contextos."},
+{m:"DIV",s:"Simulado I",q:"No jingle “Vem pra Caixa você também”, a escolha coloquial deve ser entendida, no contexto publicitário, como:",o:["Algo que sempre precisa ser corrigido.","Um uso coloquial que pode ser mantido para alcançar um público maior.","Um motivo para abandonar a gramática normativa.","Uma forma de excluir usuários da norma.","Uma mistura perfeitamente normativa."],a:1,e:"O material usa o exemplo para mostrar que uma escolha pode ser adequada à finalidade comunicativa da publicidade, embora não seja a forma recomendada pela norma escrita formal."},
+{m:"NIV",s:"Simulado II",q:"As línguas variam em relação a aspectos geográficos, sociais, históricos e situacionais. A variação de origem histórica é chamada de:",o:["Diatópica","Diacrônica","Diastrática","Diafásica","Regional"],a:1,e:"Diacrônica = variação através do tempo. Diatópica = região; diastrática = grupos/classes; diafásica = situação comunicativa."},
+{m:"NIV",s:"Simulado II",q:"Qual opção constitui uma sugestão/oferta em uma análise pragmática?",o:["Que horas vamos embora?","Quanto tempo falta para terminar?","Você quer tomar um sorvete comigo?","Escreva de novo.","Tentar de novo? Cansei!"],a:2,e:"A pergunta “Você quer tomar um sorvete comigo?” realiza, no contexto, uma oferta/sugestão; pragmática observa a função do enunciado."},
+{m:"NIV",s:"Simulado II",q:"Qual par apresenta diferença apenas por conta de um fonema?",o:["Médico, enfermeira","Feliz, felizes","Asa, assa","Gato, gatil","Cachorro, cão"],a:2,e:"“Asa” e “assa” diferem pelo contraste sonoro associado ao fonema. O exercício usa esse par para trabalhar a relação fonologia–ortografia."},
+{m:"NIV",s:"Simulado II",q:"Qual frase apresenta uma implicatura, isto é, um sentido inferido além do significado literal?",o:["Que horas são?","Um cafezinho agora caía bem, não?","O debate já terminou.","Você viu meu cachorro?","Está na hora de acordar."],a:1,e:"“Um cafezinho agora caía bem, não?” pode funcionar como uma sugestão/pedido implícito. A pragmática considera esse sentido inferido pelo contexto."},
+{m:"BIL",s:"Simulado II",q:"No modelo de transição da educação bilíngue, “transição” se refere à:",o:["Progressão do aluno de uma série para outra.","Passagem da língua do estudante para a língua dominante.","Ausência de diversidade linguística.","Passagem da sociedade dominante para uma comunidade minoritária.","Mudança de uma classe de língua estrangeira para uma de língua materna."],a:1,e:"Nos exercícios, transição significa usar a língua do estudante como meio para chegar à língua dominante."},
+{m:"BIL",s:"Simulado II",q:"Nancy Hornberger apresenta os modelos de transição, manutenção e enriquecimento. Isso implica que:",o:["A educação bilíngue é simples.","O bilinguismo é facilmente definido.","A educação bilíngue é uniforme.","Há complexidade e diversidade de conceitos sobre educação bilíngue.","Nos três modelos, a língua dominante é aprendida da mesma maneira."],a:3,e:"A classificação em modelos diferentes evidencia a complexidade e a diversidade de concepções de educação bilíngue."},
+{m:"BIL",s:"Simulado II",q:"Considerando o avanço dos estudos sobre bilinguismo: I. Deve ser compreendido a partir de concepções multidimensionais. II. A Linguística não é a única área relevante. III. A multidimensionalidade implica respeitar apenas os limites da análise linguística individual. Está correto apenas:",o:["I","II","III","I e II","I e III"],a:3,e:"I e II estão de acordo com a abordagem multidimensional; III contradiz essa ideia ao restringir a análise à dimensão linguística individual."},
+{m:"MAT",s:"Simulado II",q:"A utilização de vários modos de linguagem na construção de textos e comunicação caracteriza:",o:["Somente o uso de mídias impressas.","Uma limitação à escrita e à fala.","A integração de diferentes linguagens, como imagens, sons e textos.","A substituição da linguagem verbal por imagens.","A exclusão de recursos tecnológicos."],a:2,e:"Multimodalidade envolve integrar diferentes modos de linguagem. O material destaca texto, imagem, som e outras manifestações."},
+{m:"MAT",s:"Simulado II",q:"A apropriação de recursos digitais e de linguagens multimodais reforça o conceito de:",o:["Letramento","Fluência tecnológica","Multiletramento","Alfabetização","Informatização"],a:2,e:"Nos exercícios, o uso de múltiplas linguagens e mídias é associado diretamente ao conceito de multiletramento."},
+{m:"MAT",s:"Simulado II",q:"Na produção de materiais didáticos, analise: I. Vocabulário adequado ao público e às atividades. II. O conteudista deve dominar e trabalhar adequadamente a linguagem. III. O estilo deve ser sempre impessoal e formal. IV. Frases devem ser extensas, indiretas e fragmentadas. Está correto apenas:",o:["I e II","II e III","I e IV","I, II e IV","I, III e IV"],a:0,e:"I e II são compatíveis com a orientação do material. O exercício rejeita a ideia de que o estilo deve ser obrigatoriamente impessoal, formal, extenso e indireto."},
+{m:"LA",s:"Lista 1",q:"A interface da Linguística Aplicada com outras disciplinas ocorre principalmente:",o:["Pela necessidade de resolver problemas do mundo real em que a linguagem é elemento central.","Porque a LA depende da política para explicar todos os fenômenos.","Para buscar dogmas teóricos em outras disciplinas.","Porque desde a origem colaborou com todas as disciplinas científicas.","Para dar respaldo apenas à gramática."],a:0,e:"A questão enfatiza a vocação da LA para problemas reais de linguagem, o que exige diálogo com outros campos."},
+{m:"LA",s:"Lista 1",q:"Segundo as afirmações da lista, o ensino de língua materna deve ser contextualizado, integrar escrita/leitura/fala/texto e aproximar o aprendizado do mundo real. Está correto:",o:["I","I e II","I e III","II e III","I, II e III"],a:4,e:"As três proposições estão alinhadas ao enfoque de integração, contextualização e uso real da língua."},
+{m:"LA",s:"Lista 1",q:"As condições favoráveis ao surgimento da Linguística Aplicada incluíram, segundo a lista:",o:["Grande investimento no ensino de línguas, estudo comparativo, laboratórios de línguas e ensino com fins militares.","Baixo investimento no ensino e ausência de tecnologia.","Somente estudos sincrônicos.","Somente preocupações geopolíticas.","Somente ensino de português."],a:0,e:"A questão da lista associa o surgimento da LA a investimentos no ensino de línguas, linguística contrastiva/estudos comparativos, laboratórios e necessidades militares."},
+{m:"DIV",s:"Lista 2",q:"O uso coloquial da língua deve ocorrer sem preconceito ou discriminação. A modalidade coloquial é caracterizada, na questão, como:",o:["Formal, com escrita igual à pronúncia.","Formal, com neologismos e gestos.","Informal, com usos que não correspondem necessariamente à norma culta.","Não verbal, feita por gestos.","Escrita formal abreviada."],a:2,e:"A lista diferencia modalidade coloquial da norma culta, sem transformar essa diferença em julgamento de inferioridade."},
+{m:"MAT",s:"Lista 2",q:"Um problema apontado no uso do “livro do professor” é:",o:["Baixa qualidade dos professores.","Excesso de gêneros textuais.","Não considerar diversidade regional, perfil do professor, condições culturais e variações linguísticas do país.","Impossibilidade de acompanhar qualquer mudança linguística.","Falta de distribuição por causa do tamanho do Brasil."],a:2,e:"A alternativa destaca a diversidade regional e linguística, além do perfil e das condições culturais, como fatores que precisam ser considerados."},
+{m:"NIV",s:"Lista 3",q:"Qual opção apresenta um sujeito oculto?",o:["Elas estão chegando.","Você já foi à Bahia?","Eles estão te esperando.","Achei a bola.","Ela foi embora."],a:3,e:"Em “Achei a bola”, o sujeito “eu” não aparece escrito, mas é recuperado pela forma verbal."},
+{m:"NIV",s:"Lista 3",q:"Na estrutura silábica, a consoante que vem depois da vogal recebe o nome de:",o:["Rima","Núcleo","Consoante","Coda","Sílaba"],a:3,e:"Na terminologia usada na questão, a consoante posterior à vogal ocupa a posição de coda."},
+{m:"NIV",s:"Lista 3",q:"Qual frase implica uma crítica?",o:["Vamos ver um filme?","Hoje parece bom para uma praia!","Professor: “Bom dia! Adiantado para a aula de amanhã?” para aluno que chegou atrasado.","Pode fechar a janela, por favor?","O que você quer que levemos para a festa?"],a:2,e:"O sentido crítico não está apenas nas palavras: depende do contexto e da intenção irônica do professor."},
+{m:"NIV",s:"Lista 3",q:"No gerativismo, qual argumento é usado para combater a explicação behaviorista da linguagem?",o:["O behaviorismo ser uma escola americana.","O estímulo ser externo e ocorrer por repetição.","A língua ser adquirida pelo condicionamento externo.","A língua ser limitada a poucas possibilidades.","A criatividade no uso da linguagem."],a:4,e:"A criatividade linguística mostra que os falantes produzem e compreendem enunciados novos, não apenas repetem estímulos."},
+{m:"BIL",s:"Lista 4",q:"Na classificação de Nancy Hornberger, os três modelos de educação bilíngue são:",o:["Transição, manutenção e enriquecimento.","Alfabetização, letramento e multiletramento.","Formal, informal e híbrido.","Monolíngue, bilíngue e plurilíngue.","Gramática, tradução e imersão."],a:0,e:"São exatamente os três modelos destacados nas questões: transição, manutenção e enriquecimento."},
+{m:"BIL",s:"Lista 4",q:"A classificação em modelos de educação bilíngue evidencia que:",o:["A educação bilíngue é simples.","Mais de uma língua tem definição sempre precisa.","Os estudos mostram uniformidade.","Há certa complexidade e diversidade de conceitos.","Todos os modelos usam a língua materna da mesma forma."],a:3,e:"A própria classificação em modelos diferentes é usada para evidenciar a complexidade e a diversidade do fenômeno."},
+{m:"MAT",s:"Lista 5",q:"Um recurso que contribui para uma linguagem dialógica em material didático é:",o:["Impessoalização gramatical","Predomínio da voz reflexiva","Indeterminação do sujeito","Uso da primeira pessoa do plural ou do pronome “você”","Emprego da terceira pessoa"],a:3,e:"“Nós” e “você” aproximam o material do leitor e ajudam a construir uma relação dialógica."},
+{m:"MAT",s:"Lista 5",q:"Textos multimodais como charges, HQs e textos hipermidiáticos favorecem, na questão, a habilidade de:",o:["Leitura a partir de diferentes tipos e modalidades de linguagem.","Leitura apenas de informações confiáveis.","Leitura apenas de gêneros escolares.","Decodificação baseada somente no sistema linguístico.","Decodificação sem integração de linguagens."],a:0,e:"A multimodalidade exige que o leitor articule diferentes tipos e modalidades de linguagem."},
+{m:"MAT",s:"Lista 5",q:"Em uma abordagem de gramática reflexiva, as atividades devem ter como objetivo principal:",o:["Expor definições tradicionais.","Decorar a lista de preposições.","Saber que existem locuções.","Decorar quais preposições regem verbos.","Comparar textos semelhantes construídos com as mesmas preposições."],a:4,e:"A gramática reflexiva privilegia observação, comparação e reflexão sobre o funcionamento da língua em uso, em vez de mera memorização."}
+];
+
+let state=JSON.parse(localStorage.getItem("lingu_state")||'{"answered":0,"correct":0,"wrong":[],"history":[]}');
+let trainPool=[],trainIndex=0,trainAnswered=false,examQs=[],examIndex=0,examAnswers=[];
+
+function save(){localStorage.setItem("lingu_state",JSON.stringify(state));updateHome();renderErrors()}
+function showTab(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.add("hide"));
+ document.getElementById(id).classList.remove("hide");
+ document.querySelectorAll(".tab,.mobile-tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
+ if(id==="study") initStudy();
+ if(id==="train") initTrain();
+ if(id==="errors") renderErrors();
+ updateHome();
+}
+document.querySelectorAll(".tab,.mobile-tab").forEach(b=>b.onclick=()=>{
+  showTab(b.dataset.tab);
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+
+let studyPool=[];
+
+function initStudy(){
+  const mod=document.getElementById("studySelect").value;
+  studyPool=Q.filter(x=>mod==="all"||x.m===mod);
+  renderStudy();
+}
+
+function renderStudy(){
+  const box=document.getElementById("studyBox");
+  if(!studyPool.length){
+    box.innerHTML='<div class="card">Nenhuma questão encontrada.</div>';
+    return;
+  }
+  box.innerHTML=studyPool.map((q,i)=>`
+    <div class="study-card">
+      <div class="question-head">
+        <span class="source">${q.s}</span>
+        <span class="source">${i+1} / ${studyPool.length}</span>
+      </div>
+      <div class="study-q">${q.q}</div>
+      ${q.o.map((x,j)=>`
+        <div class="study-option ${j===q.a?'study-correct':''}">
+          <b>${String.fromCharCode(65+j)}</b> — ${x}
+        </div>`).join("")}
+      <button class="btn secondary" onclick="toggleStudyAnswer(this)">👁 Ver gabarito e explicação</button>
+      <div class="study-answer hide">
+        <div class="answer-title">✅ Gabarito: ${String.fromCharCode(65+q.a)} — ${q.o[q.a]}</div>
+        <div style="margin-top:7px">${q.e}</div>
+      </div>
+    </div>`).join("");
+}
+
+function toggleStudyAnswer(btn){
+  const answer=btn.nextElementSibling;
+  answer.classList.toggle("hide");
+  btn.textContent=answer.classList.contains("hide")
+    ?"👁 Ver gabarito e explicação"
+    :"🙈 Esconder gabarito";
+}
+
+function updateHome(){
+ const pct=state.answered?Math.round(state.correct/state.answered*100):0;
+ document.getElementById("homeScore").textContent=pct+"%";
+ document.getElementById("homeBar").style.width=pct+"%";
+ document.getElementById("homeDetail").textContent=state.answered?`${state.correct} acertos em ${state.answered} questões • ${state.wrong.length} para revisar`:"Nenhuma questão respondida ainda.";
+}
+function initTrain(){
+ const mod=document.getElementById("moduleSelect").value;
+ trainPool=Q.filter(x=>mod==="all"||x.m===mod).sort(()=>Math.random()-.5);
+ trainIndex=0; renderTrain();
+}
+document.getElementById("moduleSelect").onchange=initTrain;
+document.getElementById("studySelect").onchange=initStudy;
+
+function renderTrain(){
+ const box=document.getElementById("trainBox");
+ if(!trainPool.length){box.innerHTML='<div class="card">Nenhuma questão encontrada.</div>';return}
+ if(trainIndex>=trainPool.length) trainIndex=0;
+ const q=trainPool[trainIndex];trainAnswered=false;
+ box.innerHTML=questionHTML(q,"train");
+}
+function questionHTML(q,type){
+ return `<div class="card"><div class="question-head"><span class="source">${q.s}</span><span class="source">${type==="exam"?"Questão "+(examIndex+1)+" / 10":"Treino"}</span></div>
+ <div class="question">${q.q}</div><div class="options">${q.o.map((x,i)=>`<button class="option" onclick="answer('${type}',${i})" data-i="${i}"><span class="letter">${String.fromCharCode(65+i)}</span>${x}</button>`).join("")}</div>
+ <div id="${type}Feedback"></div>
+ <div class="controls"><button class="btn ghost" onclick="${type==="train"?"skipTrain()":"void(0)"}">Pular</button><div class="right"><button id="${type}Next" class="btn" disabled onclick="${type==="train"?"nextTrain()":"nextExam()"}">${type==="exam"?"Próxima":"Próxima questão"} →</button></div></div></div>`;
+}
+function answer(type,i){
+ const q=type==="train"?trainPool[trainIndex]:examQs[examIndex];
+ if(type==="train" && trainAnswered)return;
+ if(type==="exam" && examAnswers[examIndex]!=null)return;
+ const correct=i===q.a;
+ document.querySelectorAll(`#${type==="train"?"trainBox":"examBox"} .option`).forEach((b,idx)=>{b.disabled=true;if(idx===q.a)b.classList.add("correct");if(idx===i&&!correct)b.classList.add("wrong")});
+ const f=document.getElementById(type+"Feedback");
+ f.className="feedback "+(correct?"good":"bad");
+ f.innerHTML=`<b>${correct?"✅ Acertou!":"❌ Ainda não."}</b><div>${correct?"Boa.":"A alternativa correta é <b>"+String.fromCharCode(65+q.a)+"</b>."}</div><div class="explain">${q.e}</div>`;
+ document.getElementById(type+"Next").disabled=false;
+ if(type==="train"){
+   trainAnswered=true;state.answered++;if(correct)state.correct++;else if(!state.wrong.includes(q))state.wrong.push(q);state.history.push({q:q.q,correct});save();
+ }else{examAnswers[examIndex]=i}
+}
+function nextTrain(){trainIndex++;renderTrain()}
+function skipTrain(){trainIndex++;renderTrain()}
+function startExam(){
+ examQs=[...Q].sort(()=>Math.random()-.5).slice(0,10);examIndex=0;examAnswers=[];
+ document.getElementById("examStart").classList.add("hide");document.getElementById("examBox").classList.remove("hide");renderExam();
+}
+function renderExam(){
+ document.getElementById("examBox").innerHTML=questionHTML(examQs[examIndex],"exam");
+}
+function nextExam(){
+ if(examIndex<9){examIndex++;renderExam()}else finishExam();
+}
+function finishExam(){
+ let score=0;examQs.forEach((q,i)=>{if(examAnswers[i]===q.a)score++});
+ examQs.forEach((q,i)=>{state.answered++;if(examAnswers[i]===q.a)state.correct++;else if(!state.wrong.some(x=>x.q===q.q))state.wrong.push(q);state.history.push({q:q.q,correct:examAnswers[i]===q.a})});
+ save();
+ document.getElementById("examBox").innerHTML=`<div class="card center"><div class="kicker">Resultado</div><div class="score">${score}/10</div><h2>${score>=8?"Você já está em bom ritmo.":"Use os erros como mapa de revisão."}</h2><p class="muted">Agora vá para <b>Resumo</b> e revise os temas das questões que errou. Depois, faça outro simulado.</p><button class="btn" onclick="startExam()">Fazer outro</button></div>`;
+}
+function renderErrors(){
+ const box=document.getElementById("errorsBox");
+ if(!state.wrong.length){box.innerHTML='<div class="card center"><div class="score">🎉</div><h3>Nenhum erro salvo.</h3><p class="muted">Faça questões para montar sua revisão personalizada.</p></div>';return}
+ box.innerHTML=state.wrong.map((q,idx)=>`<div class="review-item"><b>${idx+1}. ${q.q}</b><small>Resposta correta: ${String.fromCharCode(65+q.a)} — ${q.o[q.a]}</small><p class="muted">${q.e}</p></div>`).join("");
+}
+function resetProgress(){if(confirm("Apagar todo o progresso?")){state={answered:0,correct:0,wrong:[],history:[]};save();showTab("home")}}
+updateHome();renderErrors();
+</script>
+</body>
+</html>
